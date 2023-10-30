@@ -273,6 +273,699 @@ def cp1():
                 print("Erro, insira uma opção valida")
 
 def cp2():
+    #Importação da biblioteca sys para funcionamento da função Exit
+    import sys
+
+    #Definindo variável de estoque
+    Estoque = [[1, "Vinho Agnello Pinot", 5], [2, "Vinho Agnello Chardonay", 10], [3, "Vinho Agnello Merlot", 15],
+            [4, "Vinho Agnello Cabernet", 20], [5, "Rotulo 30x40", 150], 
+            [6, "Rolha de cortiça", 100], [7, "Garrafa de vidro 750ml", 50],
+            [8, "Barril 10 Litros", 10], [9, "Caixa p/ 3 garrafas", 25], [10, "Caixa p/ 1 garrafa", 250]]
+
+    '''
+    No estoque estarão disponíveis os seguintes itens, seguidos de seu código numérico:
+    0 - Vinho Agnello Pinot
+    1 - Vinho Agnello Chardonay
+    2 - Vinho Agnello Merlot
+    3 - Vinho Agnello Cabernet
+    4 - 100/Rotulo 30x40
+    5 - 100/Rolha de cortiça
+    6 - 100/Garrafa de vidro 750ml
+    7 - 10/Barril 10 Litros
+    8 - 10/Caixa p/ 3 garrafas
+    9 - 100/Caixa p/ 1 garrafa
+    '''
+
+    #Definindo variável de histórico do estoque em formato de lista
+    historicoEstoque = []
+
+    #Definindo variáveis de itens para a loja
+    quantidadeRotulo = 0
+    precoFinalRotulos = 0
+    quantidadeBarril = 0
+    precoFinalBarril = 0
+    quantidadeCaixa1 = 0
+    precoFinalCaixa1 = 0
+    quantidadeCaixa3 = 0
+    precoFinalCaixa3 = 0
+    quantidadeGarrafa = 0
+    precoFinalGarrafa = 0
+    quantidadeRolha = 0
+    precoFinalRolha = 0
+    quantidadeRotulo = 0
+    precoFinalRotulos = 0
+
+    '''
+    Estarão disponíveis para a compra os seguintes itens (seguidos de sua quantidade por lote, preço unitário e CNPJ de fornecedor):
+    #--------------------------
+    #100 - Rotulo 30x40 - R$ 5,99 - CNPJ: 53.949.134/0001-10
+    #100 - Rolha de cortiça - R$ 7,99 - CNPJ: 71.065.307/0001-19
+    #100 - Garrafa de vidro 750ml  - R$ 159,99 - CNPJ: 99.732.744/0001-68
+    #10 - Barril 10 Litros - R$ 259,99 - CNPJ: 81.738.182/0001-02
+    #10 - Caixa p/ 3 garrafas - R$ 29,99 - CNPJ: 60.206.032/0001-70
+    #100 - Caixa p/ 1 garrafa - R$ 159,99 - CNPJ: 65.369.277/0001-31
+    #------------------------
+    A compra de qualquer um destes itens é imediatamente adicionada ao estoque
+    As retiradas do estoque só podem ser feitas em quantidades de 1 a 100 unidades (por retirada)
+    '''
+
+    #Mensagem de boas vindas
+    print('--------------------------------------------------')
+    print('Bem vindo ao hub do funcionario - Vinheria Agnello')
+    print('--------------------------------------------------')
+
+    #Menu principal do programa
+    while True:
+        print('')
+        print('----')
+        print('Menu')
+        print('----')
+        print('1 - Estoque')
+        print('2 - Compras')
+        print('3 - Historico')
+        print('0 - Sair')
+        print('')
+
+        #Seleção de qual função do menu deseja utilizar
+        menuBase = int((input('Qual aba quer acessar?(Número referente ao item): ')))
+        match menuBase:
+
+            #Funcionamento da função Estoque
+            case 1:      
+                while True:
+                    print('-------')
+                    print('Estoque')
+                    print('-------')
+                    for x in Estoque:
+                        print(' - '.join(str(i) for i in x))
+                        pass
+                    print('')
+                    retirada = input("Deseja retirar ou adicionar manualmente algo do estoque?(Digite 'Retirar', 'Adicionar' ou '0' para sair, se deseja acessar suas compras digite 'Carrinho'): ").lower()
+                    match retirada:
+                        case "retirar":
+                            while True:
+                                print('')
+                                retirarItemEstoque = int(input("O que deseja retirar do estoque?(Número referente o item!): "))
+                                retirarQuantiaEstoque = int(input(f'Quanto deseja retirar do item?: '))
+                                if retirarQuantiaEstoque <= 0:
+                                    print('----------------')
+                                    print('Quantia invalida')
+                                    print('----------------')
+                                elif (Estoque[retirarItemEstoque - 1][2] - retirarQuantiaEstoque) <0: #testando se o estoque ficará negativo
+                                    print('------------------------------------')
+                                    print('Itens insuficientes para esta ação!')
+                                    print('Voltando para o menu Estoque')
+                                    print('------------------------------------')
+                                    break
+                                else: #retirar do estoque e adicionar ao historicos
+                                    Estoque[retirarItemEstoque - 1][2] = Estoque[retirarItemEstoque - 1][2] - retirarQuantiaEstoque
+                                    historicoEstoque.append(["Retirado", Estoque[retirarItemEstoque - 1][1], retirarQuantiaEstoque])
+                                    break
+                        case "adicionar":
+                            while True:
+                                print('')
+                                adicionarItemEstoque = int(input("O que deseja adicionar ao estoque?(Número referente o item!): "))
+                                print('')
+                                adicionarQuantiaEstoque = int(input("Quanto deseja adicionar deste item?: "))
+                                print('')
+
+                                if adicionarQuantiaEstoque <= 0:
+                                    print('----------------')
+                                    print('Quantia invalida')
+                                    print('----------------')
+                                else: #retirar do estoque e adicionar ao historicos
+                                    Estoque[adicionarItemEstoque - 1][2] = Estoque[adicionarItemEstoque - 1][2] + adicionarQuantiaEstoque
+                                    historicoEstoque.append(["Adicionado", Estoque[adicionarItemEstoque - 1][1], adicionarQuantiaEstoque])
+                                    break
+                        case "0":
+                            print('')
+                            print('Voltando para o menu')
+                            break
+                        
+                        #Funcionamento da função Carrinho dentro da função estoque
+                        case 'carrinho':
+                            print('---------')
+                            print('Carrinho:')
+                            print('---------')
+                            if precoFinalRotulos == 0 and precoFinalRolha == 0 and precoFinalBarril == 0 and precoFinalCaixa1 == 0 and precoFinalCaixa3 == 0 and precoFinalGarrafa == 0:
+                                print("o seu carrinho esta vazio")
+                            else:
+                                somaFinal = precoFinalBarril + precoFinalCaixa1 + precoFinalCaixa3 + precoFinalGarrafa + precoFinalRolha + precoFinalRotulos
+                                if precoFinalRolha > 0:
+                                    print("%d Lote(s) de rolhas com valor de R$ %.2f" %(quantidadeRolha, precoFinalRolha))
+                                if precoFinalRotulos > 0:
+                                    print("%d Lote(s) de rotulos com valor de R$ %.2f" %(quantidadeRotulo, precoFinalRotulos))
+                                if precoFinalGarrafa > 0:
+                                    print("%d lote(s) de garrafas com valor de R$ %.2f" %(quantidadeGarrafa,precoFinalGarrafa))
+                                if precoFinalBarril > 0:
+                                    print("%d lote(s) de barril com valor de R$ %.2f" %(quantidadeBarril, precoFinalBarril))
+                                if precoFinalCaixa1 > 0:
+                                    print("%d Lote(s) de caixas p/ 1 garrafa com valor de R$ %.2f" %(quantidadeCaixa1, precoFinalCaixa1))
+                                if precoFinalCaixa3 > 0:
+                                    print("%d Lote(s) de caixas p/ 3 garrafa com valor de R$ %.2f" %(quantidadeCaixa3, precoFinalCaixa3))
+                                if somaFinal > 0:
+                                    print("Valor final: %.2f" %somaFinal)
+                                    while True:
+                                        pagamento = str(input("Deseja seguir com o pagamento?(sim/nao)")) #checkout
+                                        if pagamento == "sim":
+                                            print("Ok vamos prosseguir, para isso precisamos confirmas os dados da empresa")
+                                            while True:
+                                                Nome = str(input("Nome da empresa:"))
+                                                cnpj = str(input("CNPJ:"))
+                                                endereco = str(input("Cep:"))
+                                                entrega = str(input("Endereço que deve ser entregue:"))
+                                                print("Ok agora confira os seus dados e da compra:")
+                                                print(Nome)
+                                                print(cnpj)
+                                                print(endereco)
+                                                print(entrega)
+                                                print("Valor final: %.2f" %somaFinal)
+                                                validacao = str(input("Os dados estao corretos?(Digite 'sim', 'nao' ou '0' para sair): ")).lower()
+                                                match validacao:
+                                                    case "sim":
+                                                        if precoFinalRolha > 0:
+                                                            Estoque[5][2] = Estoque[5][2] + quantidadeRolha
+                                                            historicoEstoque.append(["Adicionado compras ao estoque", Estoque[5][1], quantidadeRolha])
+                                                        if precoFinalRotulos > 0:
+                                                            Estoque[4][2] = Estoque[4][2] + quantidadeRotulo
+                                                            historicoEstoque.append(["Adicionado compras ao estoque", Estoque[4][1], quantidadeRotulo])
+                                                        if precoFinalGarrafa > 0:
+                                                            Estoque[6][2] = Estoque[6][2] + quantidadeGarrafa
+                                                            historicoEstoque.append(["Adicionado compras ao estoque", Estoque[6][1], quantidadeGarrafa])
+                                                        if precoFinalBarril > 0:
+                                                            Estoque[7][2] = Estoque[7][2] + quantidadeBarril
+                                                            historicoEstoque.append(["Adicionado compras ao estoque", Estoque[7][1], quantidadeBarril])
+                                                        if precoFinalCaixa1 > 0:
+                                                            Estoque[9][2] = Estoque[9][2] + quantidadeCaixa1
+                                                            historicoEstoque.append(["Adicionado compras ao estoque", Estoque[9][1], quantidadeCaixa1])
+                                                        if precoFinalCaixa3 > 0:
+                                                            Estoque[8][2] = Estoque[8][2] + quantidadeCaixa3
+                                                            historicoEstoque.append(["Adicionado compras ao estoque", Estoque[8][1], quantidadeCaixa3])
+                                                        quantidadeRotulo = 0   #reset parcial das variaveis caso haja outra compra ou erros
+                                                        precoFinalRotulos = 0
+                                                        quantidadeBarril = 0
+                                                        precoFinalBarril = 0
+                                                        quantidadeCaixa1 = 0
+                                                        precoFinalCaixa1 = 0
+                                                        quantidadeCaixa3 = 0
+                                                        precoFinalCaixa3 = 0
+                                                        quantidadeGarrafa = 0
+                                                        precoFinalGarrafa = 0
+                                                        quantidadeRolha = 0
+                                                        precoFinalRolha = 0
+                                                        quantidadeRotulo = 0
+                                                        precoFinalRotulos = 0
+                                                        print("Ok,finalizando sua compra")
+                                                        print(".")
+                                                        print(".")
+                                                        print(".")
+                                                        print(".")
+                                                        print("Tudo pronto! Sua entrega deve chegar nos proximo 6 dias úteis.")
+                                                        break
+                                                    case "nao":
+                                                        print("Voltando para correção dos dados")
+                                                        pass
+                                                    case "0":
+                                                        print('Voltando ao')
+                                                        break
+                                                    case _:
+                                                        print('--------------------------------')
+                                                        print('Opção invalida! Tente novamente!')
+                                                        print('--------------------------------')
+                                                        pass
+                                        else:
+                                            print('Voltando para o menu')
+                                            break
+                                        break
+                        case _:
+                            print("--------------")
+                            print("Opção invalida, insira novamente!")
+                            print("--------------")
+                            pass
+
+            #Funcionamento da função Carrinho
+            case 2:
+                while True:
+                    print('--------------------')
+                    print('Menu de compras!')
+                    print('--------------------')
+                    print('1 - Mostrar catálogo')
+                    print('2 - Consultar estoque')
+                    print('3 - Consultar carrinho')
+                    print('0 - Voltar para o menu')
+                    print('')
+                    menuCompras = int(input('Oque deseja fazer? (Número referente ao item!): '))
+                    print('')
+                    match menuCompras:
+                        case 1: ##catalogo
+                            while True:
+                                print('---------')
+                                print('Catálogo!')
+                                print('---------')
+                                print('1 - Rotulo 30x40cm - quantidade do lote = 100 unidades')
+                                print('2 - Rolha de cortiça - quantidade do lote = 100 unidades')
+                                print('3 - Garrafa de vidro 750ml - quantidade do lote = 100 unidades')
+                                print('4 - Barril 10 litros - quantidade do lote = 10 unidades')
+                                print('5 - Caixa p/ 3 garrafas - quantidade do lote = 10 unidades')
+                                print('6 - Caixa p/ 1 garrafa - quantidade do lote = 100 unidades')
+                                print('')
+                                selecionarItem = int(input('Qual item deseja comprar? (Número referente o item ou "0" para sair) '))
+                                match selecionarItem:
+                                    case 1:
+                                        while True:
+                                            print('')
+                                            print('Item Selecionado (Rotulo)')
+                                            print('')
+                                            print('Fornecedor:')
+                                            print('Grafica Neto - CNPJ: 53.949.134/0001-10')
+                                            print('Especificações:')
+                                            print('Rotulos Personalizados 30x40cm')
+                                            print('Lote com 100 unidades')
+                                            print('Valor: R$5.99')
+                                            print('')
+                                            quantidadeRotulo = int(input('Qual a quantidade de lotes deseja comprar? (0 para sair) '))
+                                            if quantidadeRotulo < 0:
+                                                print('--------------------')
+                                                print('Quantidade invalida!')
+                                                print('--------------------')
+                                                pass
+                                            elif quantidadeRotulo == 0:
+                                                print('')
+                                                print('Voltando para a aba de Compras!')
+                                                print('')
+                                                break
+                                            else:
+                                                while True:
+                                                    precoFinalRotulos = quantidadeRotulo*5.99
+                                                    print('A quantia final vai ser de R$ ',precoFinalRotulos)
+                                                    confirmarCompraRotulos = input('Deseja adicionar ao carrinho? (sim/não) ').lower()
+                                                    if confirmarCompraRotulos == 'sim':
+                                                        print('')
+                                                        print('Rotulos adicionados ao carrinho!')
+                                                        print('')
+                                                        break
+                                                    elif confirmarCompraRotulos == 'não':
+                                                        print('')
+                                                        print('Compra Cancelada!')
+                                                        print('')
+                                                        print('Voltando para a aba de Compras!')
+                                                        print('')
+                                                        break
+                                                    else:
+                                                        print('--------------------------------')
+                                                        print('Opção invalida! Tente novamente!')
+                                                        print('--------------------------------')
+                                                        pass
+                                                break
+                                    case 2:
+                                        while True:
+                                            print('')
+                                            print('Item Selecionado (Rolha de cortiça)')
+                                            print('')
+                                            print('Fornecedor:')
+                                            print('Marcenaria São João - CNPJ: 71.065.307/0001-19')
+                                            print('Rolha de cortiça')
+                                            print('Lote com 100 unidades')
+                                            print('Valor:')
+                                            print('R$7.99')
+                                            print('')
+                                            quantidadeRolha = int(input('Qual a quantidade de lotes deseja comprar? (0 para sair) '))
+                                            if quantidadeRolha < 0:
+                                                print('--------------------')
+                                                print('Quantidade invalida!')
+                                                print('--------------------')
+                                                pass
+                                            elif quantidadeRolha == 0:
+                                                print('')
+                                                print('Voltando para a aba de Compras!')
+                                                print('')
+                                                break
+                                            else:
+                                                while True:
+                                                    precoFinalRolha = quantidadeRolha*7.99
+                                                    print('A quantia final vai ser de R$ ',precoFinalRolha)
+                                                    confirmarCompraRolha = input('Deseja adicionar ao carrinho? (sim/não) ').lower()
+                                                    if confirmarCompraRolha == 'sim':
+                                                        print('')
+                                                        print('Rolhas adicionados ao carrinho!')
+                                                        print('')
+                                                        break
+                                                    elif confirmarCompraRolha == 'não':
+                                                        print('')
+                                                        print('Compra Cancelada!')
+                                                        print('')
+                                                        print('Voltando para a aba de Compras!')
+                                                        print('')
+                                                        break
+                                                    else:
+                                                        print('--------------------------------')
+                                                        print('Opção invalida! Tente novamente!')
+                                                        print('--------------------------------')
+                                                        pass
+                                                break
+                                    case 3:
+                                        while True:
+                                            print('')
+                                            print('Item Selecionado (Garrafa de vidro 750ml)')
+                                            print('')
+                                            print('Fornecedor:')
+                                            print('Vidraçaria Monteiro - CNPJ: 99.732.744/0001-68')
+                                            print('Especificações:')
+                                            print('Garrafa de vidro 750ml')
+                                            print('Lote com 100 unidades')
+                                            print('Valor: R$159.99')
+                                            print('')
+                                            quantidadeGarrafa = int(input('Qual a quantidade de lotes deseja comprar? (0 para sair) '))
+                                            if quantidadeGarrafa < 0:
+                                                print('--------------------')
+                                                print('Quantidade invalida!')
+                                                print('--------------------')
+                                                pass
+                                            elif quantidadeGarrafa == 0:
+                                                print('')
+                                                print('Voltando para a aba de Compras!')
+                                                print('')
+                                                break
+                                            else:
+                                                while True:
+                                                    precoFinalGarrafa = quantidadeGarrafa*159.99
+                                                    print('A quantia final vai ser de R$ ',precoFinalGarrafa)
+                                                    confirmarCompraGarrafa = input('Deseja adicionar ao carrinho? (sim/não) ').lower()
+                                                    if confirmarCompraGarrafa == 'sim':
+                                                        print('')
+                                                        print('Garrafas de vidro adicionadas ao carrinho!')
+                                                        print('')
+                                                        break
+                                                    elif confirmarCompraGarrafa == 'não':
+                                                        print('')
+                                                        print('Compra Cancelada!')
+                                                        print('')
+                                                        print('Voltando para a aba de Compras!')
+                                                        print('')
+                                                        break
+                                                    else:
+                                                        print('--------------------------------')
+                                                        print('Opção invalida! Tente novamente!')
+                                                        print('--------------------------------')
+                                                        pass
+                                                break
+                                    case 4:
+                                        while True:
+                                            print('')
+                                            print('Item Selecionado (Barril 10 Litros)')
+                                            print('')
+                                            print('Fornecedor:')
+                                            print('Marcenaria São João - CNPJ: 71.065.307/0001-19')
+                                            print('Especificações:')
+                                            print('Barril 10 Litros')
+                                            print('Lote com 10 unidades')
+                                            print('Valor: R$259.99')
+                                            print('')
+                                            quantidadeBarril = int(input('Qual a quantidade de lotes deseja comprar? (0 para sair) '))
+                                            if quantidadeBarril < 0:
+                                                print('--------------------')
+                                                print('Quantidade invalida!')
+                                                print('--------------------')
+                                                pass
+                                            elif quantidadeBarril == 0:
+                                                print('')
+                                                print('Voltando para a aba de Compras!')
+                                                print('')
+                                                break
+                                            else:
+                                                while True:
+                                                    precoFinalBarril = quantidadeBarril*259.99
+                                                    print('A quantia final vai ser de R$ ',precoFinalBarril)
+                                                    confirmarCompraBarril = input('Deseja adicionar ao carrinho? (sim/não) ').lower()
+                                                    if confirmarCompraBarril == 'sim':
+                                                        print('')
+                                                        print('Barris adicionados ao carrinho!')
+                                                        print('')
+                                                        break
+                                                    elif confirmarCompraBarril == 'não':
+                                                        print('')
+                                                        print('Compra Cancelada!')
+                                                        print('')
+                                                        print('Voltando para a aba de Compras!')
+                                                        print('')
+                                                        break
+                                                    else:
+                                                        print('--------------------------------')
+                                                        print('Opção invalida! Tente novamente!')
+                                                        print('--------------------------------')
+                                                        pass
+                                                break
+                                    case 5:
+                                        while True:
+                                            print('')
+                                            print('Item Selecionado (Caixa p/ 3 garrafas)')
+                                            print('')
+                                            print('Fornecedor:')
+                                            print('Embalagens Aparecida - CNPJ: 60.206.032/0001-70')
+                                            print('Especificações:')
+                                            print('Rotulos Personalizados 30x40cm')
+                                            print('Caixa personalizada p/ 3 garrafas')
+                                            print('Lote com 100 unidades')
+                                            print('Valor:')
+                                            print('R$29.99')
+                                            print('')
+                                            quantidadeCaixa3 = int(input('Qual a quantidade de lotes deseja comprar? (0 para sair) '))
+                                            if quantidadeCaixa3 < 0:
+                                                print('--------------------')
+                                                print('Quantidade invalida!')
+                                                print('--------------------')
+                                                pass
+                                            elif quantidadeCaixa3 == 0:
+                                                print('')
+                                                print('Voltando para a aba de Compras!')
+                                                print('')
+                                                break
+                                            else:
+                                                while True:
+                                                    precoFinalCaixa3 = quantidadeCaixa3*29,99
+                                                    print('A quantia final vai ser de R$ ',precoFinalCaixa3)
+                                                    confirmarCompraCaixa3 = input('Deseja adicionar ao carrinho? (sim/não) ').lower()
+                                                    if confirmarCompraCaixa3 == 'sim':
+                                                        print('')
+                                                        print('Caixas p/ 3 garrafas adicionados ao carrinho!')
+                                                        print('')
+                                                        break
+                                                    elif confirmarCompraCaixa3 == 'não':
+                                                        print('')
+                                                        print('Compra Cancelada!')
+                                                        print('')
+                                                        print('Voltando para a aba de Compras!')
+                                                        print('')
+                                                        break
+                                                    else:
+                                                        print('--------------------------------')
+                                                        print('Opção invalida! Tente novamente!')
+                                                        print('--------------------------------')
+                                                        pass
+                                                break
+                                    case 6:
+                                        while True:
+                                            print('')
+                                            print('Item Selecionado (Caixa p/ 1 garrafa)')
+                                            print('')
+                                            print('Fornecedor:')
+                                            print('Embalagens Aparecida - CNPJ: 60.206.032/0001-70')
+                                            print('Especificações:')
+                                            print('Caixa personalizada p/ 1 garrafa')
+                                            print('Lote com 100 unidades')
+                                            print('Valor: R$159.99')
+                                            print('')
+                                            quantidadeCaixa1 = int(input('Qual a quantidade de lotes deseja comprar? (0 para sair) '))
+                                            if quantidadeCaixa1 < 0:
+                                                print('--------------------')
+                                                print('Quantidade invalida!')
+                                                print('--------------------')
+                                                pass
+                                            elif quantidadeCaixa1 == 0:
+                                                print('')
+                                                print('Voltando para a aba de Compras!')
+                                                print('')
+                                                break
+                                            else:
+                                                while True:
+                                                    precoFinalCaixa1 = quantidadeCaixa1*159,99
+                                                    print('A quantia final vai ser de R$ ',precoFinalCaixa1)
+                                                    confirmarCompraCaixa1 = input('Deseja adicionar ao carrinho? (sim/não) ').lower()
+                                                    if confirmarCompraCaixa1 == 'sim':
+                                                        print('')
+                                                        print('Caixas p/ 1 garrafa adicionados ao carrinho!')
+                                                        print('')
+                                                        break
+                                                    elif confirmarCompraCaixa1 == 'não':
+                                                        print('')
+                                                        print('Compra Cancelada!')
+                                                        print('')
+                                                        print('Voltando para a aba de Compras!')
+                                                        print('')
+                                                        break
+                                                    else:
+                                                        print('--------------------------------')
+                                                        print('Opção invalida! Tente novamente!')
+                                                        print('--------------------------------')
+                                                        pass
+                                                break
+                                    case 0:
+                                        print('---------------------')
+                                        print('Voltanddo para o menu')
+                                        print('---------------------')
+                                        break
+                                    case _:
+                                        print('--------------------------------')
+                                        print('Opção invalida! Tente novamente!')
+                                        print('--------------------------------')
+                                        pass
+                        
+                        #Funcionamento da função Estoque dentro do carrinho
+                        case 2: 
+                            print('-------')
+                            print('Estoque')
+                            print('-------')
+                            for x in Estoque:
+                                print(' - '.join(str(i) for i in x))
+                                pass
+                        #Funcionamento do carrinho = checkout
+                        case 3:
+                            print('---------')
+                            print('Carrinho:')
+                            print('---------')
+                            if precoFinalRotulos == 0 and precoFinalRolha == 0 and precoFinalBarril == 0 and precoFinalCaixa1 == 0 and precoFinalCaixa3 == 0 and precoFinalGarrafa == 0:
+                                print("o seu carrinho esta vazio")
+                            else:
+                                somaFinal = precoFinalBarril + precoFinalCaixa1 + precoFinalCaixa3 + precoFinalGarrafa + precoFinalRolha + precoFinalRotulos
+                                if precoFinalRolha > 0:
+                                    print("%d Lote(s) de rolhas com valor de R$ %.2f" %(quantidadeRolha, precoFinalRolha))
+                                if precoFinalRotulos > 0:
+                                    print("%d Lote(s) de rotulos com valor de R$ %.2f" %(quantidadeRotulo, precoFinalRotulos))
+                                if precoFinalGarrafa > 0:
+                                    print("%d lote(s) de garrafas com valor de R$ %.2f" %(quantidadeGarrafa,precoFinalGarrafa))
+                                if precoFinalBarril > 0:
+                                    print("%d lote(s) de barril com valor de R$ %.2f" %(quantidadeBarril, precoFinalBarril))
+                                if precoFinalCaixa1 > 0:
+                                    print("%d Lote(s) de caixas p/ 1 garrafa com valor de R$ %.2f" %(quantidadeCaixa1, precoFinalCaixa1))
+                                if precoFinalCaixa3 > 0:
+                                    print("%d Lote(s) de caixas p/ 3 garrafa com valor de R$ %.2f" %(quantidadeCaixa3, precoFinalCaixa3))
+                                if somaFinal > 0:
+                                    print("Valor final: %.2f" %somaFinal)
+                                    while True:
+                                        pagamento = str(input("Deseja seguir com o pagamento?(sim/nao)")) #checkout
+                                        if pagamento == "sim":
+                                            print("Ok vamos prosseguir, para isso precisamos confirmar os dados da empresa")
+                                            while True:
+                                                Nome = str(input("Nome da empresa:"))
+                                                cnpj = str(input("CNPJ:"))
+                                                endereco = str(input("Cep:"))
+                                                entrega = str(input("Endereço que deve ser entregue:"))
+                                                print("Ok agora confira os seus dados e da compra:")
+                                                print(Nome)
+                                                print(cnpj)
+                                                print(endereco)
+                                                print(entrega)
+                                                print("Valor final: %.2f" %somaFinal)
+                                                validacao = str(input("Os dados estao corretos?(Digite 'sim', 'nao' ou '0' para sair): ")).lower()
+                                                match validacao:
+                                                    case "sim":
+                                                        if precoFinalRolha > 0:
+                                                            Estoque[5][2] = Estoque[5][2] + (quantidadeRolha*100)
+                                                            historicoEstoque.append(["Adicionado compras ao estoque", Estoque[5][1], quantidadeRolha])
+                                                        if precoFinalRotulos > 0:
+                                                            Estoque[4][2] = Estoque[4][2] + (quantidadeRotulo*100)
+                                                            historicoEstoque.append(["Adicionado compras ao estoque", Estoque[4][1], quantidadeRotulo])
+                                                        if precoFinalGarrafa > 0:
+                                                            Estoque[6][2] = Estoque[6][2] + (quantidadeGarrafa*100)
+                                                            historicoEstoque.append(["Adicionado compras ao estoque", Estoque[6][1], quantidadeGarrafa])
+                                                        if precoFinalBarril > 0:
+                                                            Estoque[7][2] = Estoque[7][2] + (quantidadeBarril*10)
+                                                            historicoEstoque.append(["Adicionado compras ao estoque", Estoque[7][1], quantidadeBarril])
+                                                        if precoFinalCaixa1 > 0:
+                                                            Estoque[9][2] = Estoque[9][2] + (quantidadeCaixa1*100)
+                                                            historicoEstoque.append(["Adicionado compras ao estoque", Estoque[9][1], quantidadeCaixa1])
+                                                        if precoFinalCaixa3 > 0:
+                                                            Estoque[8][2] = Estoque[8][2] + (quantidadeCaixa3*10)
+                                                            historicoEstoque.append(["Adicionado compras ao estoque", Estoque[8][1], quantidadeCaixa3])
+                                                        quantidadeRotulo = 0   #reset parcial das variaveis caso haja outra compra ou erros
+                                                        precoFinalRotulos = 0
+                                                        quantidadeBarril = 0
+                                                        precoFinalBarril = 0
+                                                        quantidadeCaixa1 = 0
+                                                        precoFinalCaixa1 = 0
+                                                        quantidadeCaixa3 = 0
+                                                        precoFinalCaixa3 = 0
+                                                        quantidadeGarrafa = 0
+                                                        precoFinalGarrafa = 0
+                                                        quantidadeRolha = 0
+                                                        precoFinalRolha = 0
+                                                        quantidadeRotulo = 0
+                                                        precoFinalRotulos = 0
+                                                        print("Ok,finalizando sua compra")
+                                                        print(".")
+                                                        print(".")
+                                                        print(".")
+                                                        print(".")
+                                                        print("Tudo pronto! Sua entrega deve chegar nos proximo 6 dias úteis.")
+                                                        break
+                                                    case "nao":
+                                                        print("Voltando para correção dos dados")
+                                                        pass
+                                                    case "0":
+                                                        print('Voltando ao')
+                                                        break
+                                                    case _:
+                                                        print('--------------------------------')
+                                                        print('Opção invalida! Tente novamente!')
+                                                        print('--------------------------------')
+                                                        pass
+                                        else:
+                                            print('Voltando para o menu')
+                                            break
+                                        break
+                        case 0:
+                            print('--------------------')
+                            print('Voltando para o menu')
+                            print('--------------------')
+                            break
+                        case _:
+                            print('--------------------------------')
+                            print('Opção invalida! Tente novamente!')
+                            print('--------------------------------')
+                            pass
+            #Funcionamento da função Histórico
+            case 3:
+                while True:
+                    print('---------')
+                    print('Historico')
+                    print('---------')
+                    if len(historicoEstoque) == 0:
+                        print('Nenhum historico registrado, faça alguma movimentação para alterar isto')
+                        break
+                    else:
+                        for w in historicoEstoque:
+                            print(' - '.join(str(z) for z in w))
+                            print('')
+                        print('Fim.')
+                        print('')
+                        print('--------------------')
+                        print('Voltando para o menu')
+                        print('--------------------')
+                        break
+            #Função de fechar o programa
+            case 0:
+                print('--------------------')
+                print('Fechando o aplicativo')
+                print('--------------------')
+                sys.exit()
+            #Função para outras seleções
+            case _:
+                print('--------------------------------')
+                print('Opção invalida! Tente novamente!')
+                print('--------------------------------')
+                pass
+
+def cp3():
     #Dicionário com os itens do estoque
     estoque = {
         'rolhas': 48,
@@ -481,7 +1174,7 @@ def cp2():
         else:
             print("Opção inválida. Por favor, escolha uma as opções listadas.")
 
-def cp3():
+def cp4():
         #Parte a pagar
     nota_fiscal_pagar = []
     nota_fiscal_pagar_paga = []
@@ -684,7 +1377,7 @@ def cp3():
 
                 #Encerramento
                 case 4:
-                    arquivo_contas = open('relatorio_contas', 'w')
+                    arquivo_contas = open('relatorio_contas.txt', 'w')
 
                     arquivo_contas.write('Tabela de contas a pagar:\n\n')
                     for i, nota_pagar in enumerate(nota_fiscal_pagar_paga):
@@ -709,7 +1402,7 @@ def cp3():
         except ValueError:
             opcao_nao_encontrada()
 
-def cp4():
+def cp5():
     # Inicializar estruturas de dados para armazenar as tarefas
     tarefas = []
 
@@ -895,18 +1588,41 @@ def cp4():
                 listar_tarefas()
             case "4":
                 resumo_operacao()
+                arquivo_tarefas = open('relatório_tarefas.txt', 'w')
+                
+                arquivo_tarefas.write('Lista de tarefas:\n\n')
+
+                for i, tarefa in enumerate(tarefas, start=1):
+                    arquivo_tarefas.write(f"Tarefa {i}:")
+                    arquivo_tarefas.write(f"Descrição: {tarefa['descricao']}")
+                    arquivo_tarefas.write(f"Data inicial: {tarefa['data_inicial']}")
+                    arquivo_tarefas.write(f"Data final: {tarefa['data_final']}")
+                    arquivo_tarefas.write(f"Completude real: {tarefa['completude_real']:.0f}%")
+                    arquivo_tarefas.write(f"Completude planejada: {tarefa['completude_planejada']:.0f}%")
+                    arquivo_tarefas.write(f"Responsável: {tarefa['responsavel']}")
+                    data_final = datetime.strptime(tarefa['data_final'], '%d/%m/%Y')
+                    if data_final < datetime.now() and 'concluida' not in tarefa:
+                        arquivo_tarefas.write('Esta tarefa está atrasada!')
+                    if 'plano' in tarefa:
+                        arquivo_tarefas.write(f"Plano: {tarefa['plano']}")
+                    if 'concluida' in tarefa:
+                        arquivo_tarefas.write("Tarefa concluida")
+                
+                arquivo_tarefas.close()
+
                 break
             case _:
                 error()
 
 while True:
     split()
-    print('Menu - Guarda-Chuva')
+    print('Menu - Sistema Guarda-Chuva')
     split()
     print('1 - Loja')
-    print('2 - Controle de Estoque')
-    print('3 - Controle de Contas')
-    print('4 - Controle de Tarefas')
+    print('2 - ')
+    print('3 - Controle de Estoque')
+    print('4 - Controle de Contas')
+    print('5 - Controle de Tarefas')
     print('0 - Sair')
     print('')
     try:

@@ -64,7 +64,30 @@ def cp1():
         while True:
             a1 = str(input("O que deseja fazer em nosso site?(compras/carrinho/menu/sair)"))
             if a1 == "sair":
-                break
+                escolha_relatorio = input('Deseja criar um relatório desse sistema? (sim, não) ')
+                if escolha_relatorio == 'sim':
+                    try:
+                        with open('historico_compra.txt', 'w', encoding='utf-8') as arquivo_compra:
+                            arquivo_compra.write("Histórico de Compra:\n")
+                            if c3 > 0:
+                                arquivo_compra.write(f"Merlot   |  Quantidade: {c3}\n")
+                            if d3 > 0:
+                                arquivo_compra.write(f"Cabernet Sauvignon |  Quantidade: {d3}\n")
+                            if e3 > 0:
+                                arquivo_compra.write(f"Chardonnay |  Quantidade: {e3}\n")
+                            if f3 > 0:
+                                arquivo_compra.write(f"Pinot noir |  Quantidade: {f3}\n")
+                            if g3 > 0:
+                                arquivo_compra.write(f"Malbec   |  Quantidade: {g3}\n")
+                        print("Histórico de compra criado com sucesso.")
+                    except Exception as e:
+                        print(f"Erro ao criar o relatório: {e}")
+                    break
+                elif escolha_relatorio == 'não':
+                    break
+                else:
+                    print("Erro, insira 'sim' ou 'não' para criar o relatório.")
+
             elif a1 == "compras": #sistema de compras e quantidade
                 print("Em nossa cartela temos:")
                 print(a)
@@ -924,10 +947,31 @@ def cp2():
                                             break
                                         break
                         case 0:
-                            print('--------------------')
-                            print('Voltando para o menu')
-                            print('--------------------')
+                            escolha_imprimir_relatorio = input('Deseja imprimir o relatório do histórico de compra de insumos? (sim, não) ')
+                            if escolha_imprimir_relatorio == 'sim':
+                                try:
+                                    with open('historico_compra_insumos.txt', 'w', encoding='utf-8') as arquivo_historico:
+                                        arquivo_historico.write('---------\n')
+                                        arquivo_historico.write('Histórico de Compra de Insumos\n')
+                                        arquivo_historico.write('---------\n')
+
+                                        if len(historicoEstoque) == 0:
+                                            arquivo_historico.write('Nenhum histórico registrado, faça alguma movimentação para alterar isso\n')
+                                        else:
+                                            for w in historicoEstoque:
+                                                arquivo_historico.write(' - '.join(str(z) for z in w) + '\n')
+
+                                        arquivo_historico.write('Fim.\n')
+                                        arquivo_historico.write('\n')
+                                        arquivo_historico.write('--------------------\n')
+                                        arquivo_historico.write('Voltando para o menu\n')
+                                        arquivo_historico.write('--------------------\n')
+                                    print('Histórico de compra de insumos criado com sucesso.')
+                                except Exception as e:
+                                    print(f'Erro ao criar o histórico de compra de insumos: {e}')
+
                             break
+                        
                         case _:
                             print('--------------------------------')
                             print('Opção invalida! Tente novamente!')
@@ -1156,7 +1200,7 @@ def cp3():
                     while True:
                         escolha_relatorio = input('Deseja criar um relatório desse sistema? (sim, não) ')
                         if escolha_relatorio == 'sim':
-                            arquivo_estoque = open('relatorio_estoque.txt', 'w')
+                            arquivo_estoque = open('relatorio_estoque.txt', 'w', )
 
                             arquivo_estoque.write('Histórico de Estoque:\n\n')
                             for item in historico_estoque:
@@ -1390,7 +1434,7 @@ def cp4():
                     while True:
                         escolha_relatorio = input('Deseja criar um relatório desse sistema? (sim, não) ')
                         if escolha_relatorio == 'sim':
-                            arquivo_contas = open('relatorio_contas.txt', 'w')
+                            arquivo_contas = open('relatorio_contas.txt', 'w',encoding='utf-8')
 
                             arquivo_contas.write('Tabela de contas a pagar:\n\n')
                             for i, nota_pagar in enumerate(nota_fiscal_pagar_paga):
@@ -1609,7 +1653,7 @@ def cp5():
                 while True:
                         escolha_relatorio = input('Deseja criar um relatório desse sistema? (sim, não) ')
                         if escolha_relatorio == 'sim':
-                            arquivo_tarefa = open('relatório_tarefas.txt', 'w')
+                            arquivo_tarefa = open('relatório_tarefas.txt', 'w',encoding='utf-8')
 
                             arquivo_tarefa.write('Lista de Tarefas:\n\n')
 
